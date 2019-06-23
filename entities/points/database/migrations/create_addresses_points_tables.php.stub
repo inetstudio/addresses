@@ -1,0 +1,47 @@
+<?php
+
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
+
+/**
+ * Class CreateAddressesPointsTables.
+ */
+class CreateAddressesPointsTables extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up()
+    {
+        Schema::create('addresses_points', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('point_type');
+            $table->string('user_address', 500);
+            $table->string('pretty_address', 500)->default('');
+            $table->string('region', 500)->default('');
+            $table->string('district', 500)->default('');
+            $table->string('city', 500)->default('');
+            $table->string('street', 500)->default('');
+            $table->string('house', 500)->default('');
+            $table->string('building', 500)->default('');
+            $table->string('structure', 500)->default('');
+            $table->string('place', 500)->default('');
+            $table->string('flat', 500)->default('');
+            $table->string('zip', 500)->default('');
+            $table->string('lat', 500)->default('');
+            $table->string('lon', 500)->default('');
+            $table->integer('quality')->default(0);
+            $table->json('additional_info');
+            $table->timestamps();
+            $table->softDeletes();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down()
+    {
+        Schema::drop('addresses_points');
+    }
+}

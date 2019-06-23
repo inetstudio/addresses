@@ -1,0 +1,30 @@
+{
+  "name": "inetstudio/addresses",
+  "description": "Package for addresses",
+  "homepage": "https://github.com/inetstudio/addresses",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Konstantin Bukin",
+      "email": "bukin@inetstudio.ru"
+    }
+  ],
+  "require": {
+    "inetstudio/admin-panel": "1.8.*"
+  },
+  "autoload": {
+    "psr-4": {
+      "InetStudio\\AddressesPackage\\": "package/src",
+      "InetStudio\\AddressesPackage\\Points\\": "entities/points/src"
+    }
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "InetStudio\\AddressesPackage\\Providers\\ServiceProvider",
+        "InetStudio\\AddressesPackage\\Points\\Providers\\BindingsServiceProvider",
+        "InetStudio\\AddressesPackage\\Points\\Providers\\ServiceProvider"
+      ]
+    }
+  }
+}
