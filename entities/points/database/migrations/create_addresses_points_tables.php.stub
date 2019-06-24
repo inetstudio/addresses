@@ -31,7 +31,7 @@ class CreateAddressesPointsTables extends Migration
             $table->string('lat', 500)->default('');
             $table->string('lon', 500)->default('');
             $table->integer('quality')->default(0);
-            $table->json('additional_info');
+            $table->json('additional_info')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
