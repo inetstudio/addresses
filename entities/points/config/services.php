@@ -7,6 +7,6 @@ return [
      */
 
     'ahunter' => [
-        'search_url' => 'https://ahunter.ru/site/cleanse/address?user='.env('AHUNTER_USER').';output=json;mode=search;query=',
+        'search_url' => 'https://ahunter.ru/site/cleanse/address?user='.env('AHUNTER_USER').';output=json|pretty|acover|ageo|acodes|adict|afiasall|aqual|apretty|status|ainabr|astations;mode=search;query=',
     ],
 ];

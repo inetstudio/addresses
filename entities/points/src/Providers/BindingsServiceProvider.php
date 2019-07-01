@@ -29,6 +29,7 @@ class BindingsServiceProvider extends BaseServiceProvider implements DeferrableP
         'InetStudio\AddressesPackage\Points\Contracts\Http\Responses\Back\Utility\SuggestionsResponseContract' => 'InetStudio\AddressesPackage\Points\Http\Responses\Back\Utility\SuggestionsResponse',
         'InetStudio\AddressesPackage\Points\Contracts\Http\Responses\Front\MapPointsResponseContract' => 'InetStudio\AddressesPackage\Points\Http\Responses\Front\MapPointsResponse',
         'InetStudio\AddressesPackage\Points\Contracts\Models\PointModelContract' => 'InetStudio\AddressesPackage\Points\Models\PointModel',
+        'InetStudio\AddressesPackage\Points\Contracts\Services\Back\AHunterServiceContract' => 'InetStudio\AddressesPackage\Points\Services\Back\AHunterService',
         'InetStudio\AddressesPackage\Points\Contracts\Services\Back\DataTableServiceContract' => 'InetStudio\AddressesPackage\Points\Services\Back\DataTableService',
         'InetStudio\AddressesPackage\Points\Contracts\Services\Back\ItemsServiceContract' => 'InetStudio\AddressesPackage\Points\Services\Back\ItemsService',
         'InetStudio\AddressesPackage\Points\Contracts\Services\Back\UtilityServiceContract' => 'InetStudio\AddressesPackage\Points\Services\Back\UtilityService',

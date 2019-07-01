@@ -35,6 +35,7 @@ class PointModel extends Model implements PointModelContract
      * @var array
      */
     protected $fillable = [
+        'hash',
         'point_type',
         'user_address',
         'pretty_address',
@@ -51,6 +52,7 @@ class PointModel extends Model implements PointModelContract
         'lon',
         'quality',
         'additional_info',
+        'raw_data',
     ];
 
     /**
@@ -71,6 +73,7 @@ class PointModel extends Model implements PointModelContract
      */
     protected $casts = [
         'additional_info' => 'array',
+        'raw_data' => 'array',
     ];
 
     /**
@@ -81,8 +84,18 @@ class PointModel extends Model implements PointModelContract
         parent::boot();
 
         self::$buildQueryScopeDefaults['columns'] = [
-            'id', 'point_type', 'pretty_address', 'city', 'quality', 'additional_info',
+            'id', 'hash', 'point_type', 'pretty_address', 'city', 'quality', 'additional_info',
         ];
+    }
+
+    /**
+     * Сеттер атрибута hash.
+     *
+     * @param $value
+     */
+    public function setHashAttribute($value): void
+    {
+        $this->attributes['hash'] = trim(strip_tags($value));
     }
 
     /**
@@ -243,6 +256,16 @@ class PointModel extends Model implements PointModelContract
     public function setAdditionalInfoAttribute($value): void
     {
         $this->attributes['additional_info'] = json_encode((array) $value);
+    }
+
+    /**
+     * Сеттер атрибута raw_data.
+     *
+     * @param $value
+     */
+    public function setRawDataAttribute($value): void
+    {
+        $this->attributes['raw_data'] = json_encode((array) $value);
     }
 
     /**

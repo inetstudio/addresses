@@ -3,6 +3,7 @@
 namespace InetStudio\AddressesPackage\Points\Services\Back;
 
 use Illuminate\Support\Arr;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use InetStudio\AdminPanel\Base\Services\BaseService;
 use Illuminate\Contracts\Container\BindingResolutionException;
@@ -51,5 +52,26 @@ class ItemsService extends BaseService implements ItemsServiceContract
         Session::flash('success', 'Точка «'.$item->pretty_address.'» успешно '.$action);
 
         return $item;
+    }
+
+    /**
+     * Присваиваем точки объекту.
+     *
+     * @param $points
+     * @param $item
+     */
+    public function attachToObject($points, $item): void
+    {
+        if ($points instanceof Request) {
+            $points = $points->get('points', []);
+        } else {
+            $points = (array) $points;
+        }
+
+        if (! empty($points)) {
+            $item->syncPoints($this->model::whereIn('id', $points)->get());
+        } else {
+            $item->detachPoints($item->points);
+        }
     }
 }

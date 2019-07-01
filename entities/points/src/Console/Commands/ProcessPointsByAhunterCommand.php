@@ -2,7 +2,6 @@
 
 namespace InetStudio\AddressesPackage\Points\Console\Commands;
 
-use GuzzleHttp\Client;
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Container\BindingResolutionException;
 
@@ -33,8 +32,7 @@ class ProcessPointsByAhunterCommand extends Command
     public function handle()
     {
         $pointsService = app()->make('InetStudio\AddressesPackage\Points\Contracts\Services\Back\ItemsServiceContract');
-
-        $client = new Client();
+        $ahunterService = app()->make('InetStudio\AddressesPackage\Points\Contracts\Services\Back\AHunterServiceContract');
 
         $addresses = $pointsService->getModel()->where(
                 [
@@ -45,15 +43,12 @@ class ProcessPointsByAhunterCommand extends Command
         $bar = $this->output->createProgressBar(count($addresses));
 
         foreach ($addresses as $address) {
-            $url = config('services.ahunter.search_url').$address->user_address;
+            $ahunterResult = $ahunterService->recognizeAddress($address->user_address);
 
-            $response = $client->post($url);
-            $addressAH = json_decode($response->getBody()->getContents(), true);
-
-            if (count($addressAH['addresses']) == 1 && $addressAH['addresses'][0]['quality']['precision'] == 100) {
-                $data = [];
-
-                foreach ($addressAH['addresses'][0]['fields'] as $field) {
+            $data = [];
+            
+            if (count($ahunterResult['addresses']) == 1 && $ahunterResult['addresses'][0]['quality']['precision'] == 100) {
+                foreach ($ahunterResult['addresses'][0]['fields'] as $field) {
                     $fieldName = strtolower($field['level']);
 
                     if (isset($field['name'])) {
@@ -62,13 +57,16 @@ class ProcessPointsByAhunterCommand extends Command
                     }
                 }
 
-                $data['pretty_address'] = $addressAH['addresses'][0]['pretty'];
-                $data['lon'] = $addressAH['addresses'][0]['geo_data']['mid']['lon'];
-                $data['lat'] = $addressAH['addresses'][0]['geo_data']['mid']['lat'];
-                $data['quality'] = $addressAH['addresses'][0]['quality']['precision'];
-
-                $pointsService->save($data, $address->id);
+                $data['hash'] = $ahunterResult['addresses'][0]['codes']['fias_house'] ?? '';
+                $data['pretty_address'] = $ahunterResult['addresses'][0]['pretty'];
+                $data['lon'] = $ahunterResult['addresses'][0]['geo_data']['mid']['lon'];
+                $data['lat'] = $ahunterResult['addresses'][0]['geo_data']['mid']['lat'];
+                $data['quality'] = $ahunterResult['addresses'][0]['quality']['precision'];
             }
+            
+            $data['raw_data'] = $ahunterResult;
+
+            $pointsService->save($data, $address->id);
 
             $bar->advance();
         }
