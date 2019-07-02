@@ -5,8 +5,8 @@ namespace InetStudio\AddressesPackage\Points\Http\Controllers\Front;
 use InetStudio\AdminPanel\Base\Http\Controllers\Controller;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use InetStudio\AddressesPackage\Points\Services\Front\ItemsService;
-use InetStudio\AddressesPackage\Points\Contracts\Http\Responses\Front\MapPointsResponseContract;
 use InetStudio\AddressesPackage\Points\Contracts\Http\Controllers\Front\ItemsControllerContract;
+use InetStudio\AddressesPackage\Points\Contracts\Http\Responses\Front\MapPointsResponseContract;
 
 /**
  * Class ItemsController.

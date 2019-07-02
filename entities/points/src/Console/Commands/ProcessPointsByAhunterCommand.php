@@ -76,6 +76,5 @@ class ProcessPointsByAhunterCommand extends Command
 
     protected function processAhunterResult()
     {
-
     }
 }

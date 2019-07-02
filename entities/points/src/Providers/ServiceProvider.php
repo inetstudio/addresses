@@ -56,8 +56,7 @@ class ServiceProvider extends BaseServiceProvider
         $timestamp = date('Y_m_d_His', time());
         $this->publishes(
             [
-                __DIR__.'/../../database/migrations/create_addresses_points_tables.php.stub' =>
-                    database_path('migrations/'.$timestamp.'_create_addresses_points_tables.php'),
+                __DIR__.'/../../database/migrations/create_addresses_points_tables.php.stub' => database_path('migrations/'.$timestamp.'_create_addresses_points_tables.php'),
             ],
             'migrations'
         );

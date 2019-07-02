@@ -48,7 +48,7 @@ class ItemsService extends BaseService implements ItemsServiceContract
                     'стр. ',
                     'пер. ',
                     'корп. ',
-                    'наб. '
+                    'наб. ',
                 ],
                 $point->pretty_address
             );
@@ -62,7 +62,7 @@ class ItemsService extends BaseService implements ItemsServiceContract
                     'coordinates' => [
                         trim($point->lat),
                         trim($point->lon),
-                    ]
+                    ],
                 ],
                 'name' => $address,
                 'address' => $address,
@@ -71,8 +71,8 @@ class ItemsService extends BaseService implements ItemsServiceContract
         });
 
         $data = [
-            "type" => "FeatureCollection",
-            "features" => $items,
+            'type' => 'FeatureCollection',
+            'features' => $items,
         ];
 
         return $data;
@@ -86,8 +86,8 @@ class ItemsService extends BaseService implements ItemsServiceContract
     public function getEmptyMapCollection(): array
     {
         return [
-            "type" => "FeatureCollection",
-            "features" => [],
+            'type' => 'FeatureCollection',
+            'features' => [],
         ];
     }
 
