@@ -34,43 +34,48 @@ class ProcessPointsByAhunterCommand extends Command
         $pointsService = app()->make('InetStudio\AddressesPackage\Points\Contracts\Services\Back\ItemsServiceContract');
         $ahunterService = app()->make('InetStudio\AddressesPackage\Points\Contracts\Services\Back\AHunterServiceContract');
 
-        $addresses = $pointsService->getModel()->where(
-                [
-                    ['quality', '=', 0],
-                ]
-            )->get();
+        $points = $pointsService->getModel()->where('hash', '=', '')->get();
 
-        $bar = $this->output->createProgressBar(count($addresses));
+        $bar = $this->output->createProgressBar(count($points));
 
-        foreach ($addresses as $address) {
-            $ahunterResult = $ahunterService->recognizeAddress($address->user_address);
+        foreach ($points as $point) {
+            $ahunterResult = $point->raw_data ?? $ahunterService->recognizeAddress($point->user_address);
 
             $data = [];
-            
-            if (count($ahunterResult['addresses']) == 1 && $ahunterResult['addresses'][0]['quality']['precision'] == 100) {
-                foreach ($ahunterResult['addresses'][0]['fields'] as $field) {
-                    $fieldName = strtolower($field['level']);
 
-                    if (isset($field['name'])) {
-                        $value = $field['type'].'. '.$field['name'];
-                        $data[$fieldName] = $value;
+            foreach ($ahunterResult['addresses'] as $address) {
+                if ($address['quality']['precision'] > 80) {
+                    foreach ($address['fields'] as $field) {
+                        $fieldName = strtolower($field['level']);
+
+                        if (isset($field['name'])) {
+                            $value = $field['type'].'. '.$field['name'];
+                            $data[$fieldName] = $value;
+                        }
                     }
-                }
 
-                $data['hash'] = $ahunterResult['addresses'][0]['codes']['fias_house'] ?? '';
-                $data['pretty_address'] = $ahunterResult['addresses'][0]['pretty'];
-                $data['lon'] = $ahunterResult['addresses'][0]['geo_data']['mid']['lon'];
-                $data['lat'] = $ahunterResult['addresses'][0]['geo_data']['mid']['lat'];
-                $data['quality'] = $ahunterResult['addresses'][0]['quality']['precision'];
+                    $data['hash'] = $address['codes']['fias_house'] ?? md5($address['pretty']);
+                    $data['pretty_address'] = $address['pretty'];
+                    $data['lon'] = $address['geo_data']['mid']['lon'];
+                    $data['lat'] = $address['geo_data']['mid']['lat'];
+                    $data['quality'] = $address['quality']['precision'];
+
+                    break;
+                }
             }
-            
+
             $data['raw_data'] = $ahunterResult;
 
-            $pointsService->save($data, $address->id);
+            $pointsService->save($data, $point->id);
 
             $bar->advance();
         }
 
         $bar->finish();
+    }
+
+    protected function processAhunterResult()
+    {
+
     }
 }
